@@ -7,9 +7,11 @@ import { QueryModule } from './query/query.module';
 import { ConnectionsModule } from './connections/connections.module';
 import { DiscoveryModule } from './discovery/discovery.module';
 import { QueryHistoryModule } from './query-history/query-history.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
