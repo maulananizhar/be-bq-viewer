@@ -200,6 +200,19 @@ Deploy backend dan frontend sebagai service terpisah di Coolify.
 | `NODE_ENV`       | ❌    | Default: `production`                                                |
 | `PORT`           | ❌    | Default: `5000`                                                      |
 
+#### Health Check Endpoint
+
+Backend menyediakan endpoint `GET /api/health` yang digunakan oleh Docker healthcheck:
+
+```
+GET /api/health
+Response: { "status": "ok" }
+```
+
+- **Tidak memerlukan autentikasi** (dijaga oleh `@Public()` decorator)
+- Digunakan oleh Docker/Coolify untuk memverifikasi container berjalan dengan benar
+- Jika endpoint ini tidak dapat diakses, container akan ditandai sebagai **unhealthy**
+
 #### Cara generate AUTH_PASSWORD
 
 **Opsi A — hash bcrypt (direkomendasikan):**
