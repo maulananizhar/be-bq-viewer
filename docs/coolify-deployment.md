@@ -119,9 +119,9 @@ services:
     image: ${DOCKER_USERNAME}/fe-bq-viewer:latest
     container_name: fe-bq-viewer
     ports:
-      - "${NGINX_PORT:-80}:80"
+      - "${FRONTEND_PORT:-80}:80"
     environment:
-      - NGINX_PORT=80
+      - PORT=80
       - BACKEND_HOST=backend
       - BACKEND_PORT=5000
     depends_on:
@@ -180,13 +180,15 @@ Deploy backend dan frontend sebagai service terpisah di Coolify.
 
 | Variable       | Value                            |
 | -------------- | -------------------------------- |
-| `NGINX_PORT`   | `80`                             |
+| `PORT`         | `80`                             |
 | `BACKEND_HOST` | (IP/domain backend dari Coolify) |
 | `BACKEND_PORT` | `5000`                           |
 
 6. Deploy
 
 ---
+
+## Troubleshooting
 
 ## Environment Variables
 
@@ -243,7 +245,7 @@ node -e "
 
 | Variable       | Wajib | Deskripsi                               |
 | -------------- | ----- | --------------------------------------- |
-| `NGINX_PORT`   | ❌    | Default: `80`                           |
+| `PORT`         | ❌    | Default: `80`                           |
 | `BACKEND_HOST` | ✅    | Hostname backend (nama service atau IP) |
 | `BACKEND_PORT` | ❌    | Default: `5000`                         |
 
@@ -297,7 +299,7 @@ flowchart LR
     subgraph Coolify
         subgraph "Docker Compose Stack"
             BE[Backend :5000]
-            FE[Frontend Nginx :80]
+            FE[Frontend :80]
             BE <--> FE
         end
         subgraph "External Services"
