@@ -10,7 +10,7 @@ name: bq-viewer
 #
 # Cara pakai:
 #   1. cp .env.example .env
-#   2. Isi DOCKER_USERNAME, MONGODB_URI, ENCRYPTION_KEY, AUTH_PASSWORD
+#   2. Isi DOCKER_USERNAME, MONGODB_URI, ENCRYPTION_KEY, AUTH_USERNAME, AUTH_PASSWORD
 #   3. docker compose up -d
 # =============================================================================
 
@@ -25,6 +25,7 @@ services:
       - NODE_ENV=production
       - MONGODB_URI=${MONGODB_URI}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - AUTH_USERNAME=${AUTH_USERNAME}
       - AUTH_PASSWORD=${AUTH_PASSWORD}
       - CORS_ORIGIN=${CORS_ORIGIN:-}
     restart: unless-stopped

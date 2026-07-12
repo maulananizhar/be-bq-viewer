@@ -144,12 +144,13 @@ networks:
 5. **Compose File**: `docker-compose.coolify.yml`
 6. Set **Environment Variables** (lihat tabel di bawah):
 
-   | Variable          | Wajib | Contoh / Petunjuk                           |
-   | ----------------- | ----- | ------------------------------------------- |
-   | `DOCKER_USERNAME` | ✅    | Username Docker Hub Anda                    |
-   | `MONGODB_URI`     | ✅    | Connection string MongoDB Anda              |
-   | `ENCRYPTION_KEY`  | ✅    | `openssl rand -base64 64`                   |
-   | `AUTH_PASSWORD`   | ✅    | Bcrypt hash (lihat tabel env vars di bawah) |
+   | Variable          | Wajib | Contoh / Petunjuk                 |
+   | ----------------- | ----- | --------------------------------- |
+   | `DOCKER_USERNAME` | ✅    | Username Docker Hub Anda          |
+   | `MONGODB_URI`     | ✅    | Connection string MongoDB Anda    |
+   | `ENCRYPTION_KEY`  | ✅    | `openssl rand -base64 64`         |
+   | `AUTH_USERNAME`   | ✅    | Username untuk login              |
+   | `AUTH_PASSWORD`   | ✅    | Password untuk login (plain text) |
 
 7. Deploy!
 
@@ -198,7 +199,8 @@ Deploy backend dan frontend sebagai service terpisah di Coolify.
 | ---------------- | ----- | -------------------------------------------------------------------- |
 | `MONGODB_URI`    | ✅    | Connection string MongoDB Anda sendiri                               |
 | `ENCRYPTION_KEY` | ✅    | Key enkripsi 64-byte base64. Generate via: `openssl rand -base64 64` |
-| `AUTH_PASSWORD`  | ✅    | Bcrypt hash dari password login. Generate: lihat catatan di bawah    |
+| `AUTH_USERNAME`  | ✅    | Username untuk login                                                 |
+| `AUTH_PASSWORD`  | ✅    | Password untuk login (plain text — akan di-hash otomatis)            |
 | `NODE_ENV`       | ❌    | Default: `production`                                                |
 | `PORT`           | ❌    | Default: `5000`                                                      |
 
@@ -215,30 +217,14 @@ Response: { "status": "ok" }
 - Digunakan oleh Docker/Coolify untuk memverifikasi container berjalan dengan benar
 - Jika endpoint ini tidak dapat diakses, container akan ditandai sebagai **unhealthy**
 
-#### Cara generate AUTH_PASSWORD
+#### Cara set AUTH_USERNAME dan AUTH_PASSWORD
 
-**Opsi A — hash bcrypt (direkomendasikan):**
-
-```bash
-node -e "require('bcryptjs').hash('password-anda', 15).then(console.log)"
-```
-
-Hasilnya (contoh): `$2a$15$hgJoD/HznMrpJQlrh382E.anXcSrvY4H5CIyWu2343EohD8DnLxlq`
-
-**Opsi B — hash via Coolify Startup Script (alternatif):**  
-Jika mau pakai plain text password di Coolify, tambahkan script inisialisasi:
+Cukup set **plain text** username dan password di environment variable.
+Aplikasi akan meng-hash password secara otomatis dan menyimpannya ke MongoDB.
 
 ```bash
-node -e "
-  const bcrypt = require('bcryptjs');
-  const pwd = process.env.AUTH_PASSWORD;
-  if (pwd && !pwd.startsWith('\$2')) {
-    bcrypt.hash(pwd, 15).then(hash => {
-      process.env.AUTH_PASSWORD = hash;
-      console.log('Password hashed');
-    });
-  }
-"
+AUTH_USERNAME=admin
+AUTH_PASSWORD=password-anda
 ```
 
 ### Frontend
