@@ -17,7 +17,7 @@ async function bootstrap() {
   });
 
   // Global prefix dipindah ke Express server (server.js) untuk proxy handling
-  // app.setGlobalPrefix("api");
+  app.setGlobalPrefix("api");
 
   const port = process.env.PORT || 5000;
   await app.listen(port);
